@@ -1,0 +1,11 @@
+PyQt6>=6.6.0
+PyQt6-Qt6>=6.6.0
+PyQt6-sip>=13.6.0
+Pillow>=10.0.0
+img2pdf>=0.5.1
+pikepdf>=8.0.0
+numpy>=1.24.0
+pytwain>=2.1.0
+pyinsane2>=2.0.13
+reportlab>=4.0.0
+pyinstaller>=6.0.0
