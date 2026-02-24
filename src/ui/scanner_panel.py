@@ -23,17 +23,39 @@ class ScannerPanel(QWidget):
     def _setup_ui(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(8, 8, 8, 8)
+        layout.setSpacing(6)
+
+        # Scanner status indicator
+        self.status_label = QLabel(tr.t("status_no_scanner"))
+        self.status_label.setStyleSheet(
+            "color: #cc6600; font-weight: bold; font-size: 11px; "
+            "padding: 4px 8px; background-color: #fff8ee; "
+            "border: 1px solid #ffe0a0; border-radius: 4px;"
+        )
+        layout.addWidget(self.status_label)
 
         # Device selection
         device_group = QGroupBox(tr.t("panel_scanner"))
         device_layout = QVBoxLayout()
+        device_layout.setSpacing(4)
 
-        device_layout.addWidget(QLabel(tr.t("scanner_device")))
+        lbl = QLabel(tr.t("scanner_device"))
+        lbl.setStyleSheet("font-weight: bold; color: #333333;")
+        device_layout.addWidget(lbl)
+
         self.device_combo = QComboBox()
+        self.device_combo.setMinimumHeight(30)
         self.device_combo.currentIndexChanged.connect(self._on_device_changed)
         device_layout.addWidget(self.device_combo)
 
         self.refresh_btn = QPushButton(tr.t("scanner_refresh"))
+        self.refresh_btn.setMinimumHeight(32)
+        self.refresh_btn.setStyleSheet(
+            "QPushButton { background-color: #0060c0; color: white; "
+            "border: none; border-radius: 4px; font-weight: bold; }"
+            "QPushButton:hover { background-color: #004fa0; }"
+            "QPushButton:pressed { background-color: #003d80; }"
+        )
         self.refresh_btn.clicked.connect(self.refresh_requested.emit)
         device_layout.addWidget(self.refresh_btn)
 
@@ -45,6 +67,7 @@ class ScannerPanel(QWidget):
         source_layout = QVBoxLayout()
 
         self.source_combo = QComboBox()
+        self.source_combo.setMinimumHeight(28)
         self._populate_sources()
         self.source_combo.currentIndexChanged.connect(
             lambda: self.settings_changed.emit()
@@ -59,6 +82,7 @@ class ScannerPanel(QWidget):
         mode_layout = QVBoxLayout()
 
         self.mode_combo = QComboBox()
+        self.mode_combo.setMinimumHeight(28)
         self._populate_modes()
         self.mode_combo.currentIndexChanged.connect(
             lambda: self.settings_changed.emit()
@@ -73,6 +97,7 @@ class ScannerPanel(QWidget):
         res_layout = QVBoxLayout()
 
         self.resolution_combo = QComboBox()
+        self.resolution_combo.setMinimumHeight(28)
         for dpi in [75, 100, 150, 200, 300, 400, 600]:
             self.resolution_combo.addItem(f"{dpi} DPI", dpi)
         self.resolution_combo.setCurrentIndex(4)  # 300 DPI default
@@ -89,6 +114,7 @@ class ScannerPanel(QWidget):
         paper_layout = QVBoxLayout()
 
         self.paper_combo = QComboBox()
+        self.paper_combo.setMinimumHeight(28)
         self._populate_paper_sizes()
         self.paper_combo.currentIndexChanged.connect(
             lambda: self.settings_changed.emit()
@@ -106,6 +132,8 @@ class ScannerPanel(QWidget):
         self.brightness_slider.setRange(-100, 100)
         self.brightness_slider.setValue(0)
         self.brightness_label = QLabel("0")
+        self.brightness_label.setMinimumWidth(30)
+        self.brightness_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.brightness_slider.valueChanged.connect(
             lambda v: self.brightness_label.setText(str(v))
         )
@@ -126,6 +154,8 @@ class ScannerPanel(QWidget):
         self.contrast_slider.setRange(-100, 100)
         self.contrast_slider.setValue(0)
         self.contrast_label = QLabel("0")
+        self.contrast_label.setMinimumWidth(30)
+        self.contrast_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.contrast_slider.valueChanged.connect(
             lambda v: self.contrast_label.setText(str(v))
         )
@@ -188,9 +218,23 @@ class ScannerPanel(QWidget):
         self.device_combo.clear()
         if not scanners:
             self.device_combo.addItem(tr.t("scanner_no_device"), None)
+            self.status_label.setText(tr.t("status_no_scanner"))
+            self.status_label.setStyleSheet(
+                "color: #cc6600; font-weight: bold; font-size: 11px; "
+                "padding: 4px 8px; background-color: #fff8ee; "
+                "border: 1px solid #ffe0a0; border-radius: 4px;"
+            )
         else:
             for scanner in scanners:
                 self.device_combo.addItem(scanner.name, scanner.device_id)
+            self.status_label.setText(
+                tr.t("status_scanner_connected", name=scanners[0].name)
+            )
+            self.status_label.setStyleSheet(
+                "color: #007a00; font-weight: bold; font-size: 11px; "
+                "padding: 4px 8px; background-color: #eef8ee; "
+                "border: 1px solid #a0d8a0; border-radius: 4px;"
+            )
 
     def get_settings(self) -> ScanSettings:
         """Get current scan settings from the panel."""

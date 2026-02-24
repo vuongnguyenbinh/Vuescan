@@ -29,6 +29,7 @@ class ZoomableGraphicsView(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setFrameShape(QFrame.Shape.NoFrame)
+        self.setStyleSheet("background-color: #d8d8d8;")
 
     def wheelEvent(self, event: QWheelEvent):
         if event.angleDelta().y() > 0:
@@ -58,7 +59,6 @@ class ZoomableGraphicsView(QGraphicsView):
                 self.scene().itemsBoundingRect(),
                 Qt.AspectRatioMode.KeepAspectRatio
             )
-            # Compute actual zoom
             transform = self.transform()
             self._zoom_factor = transform.m11()
             self.zoom_changed.emit(self._zoom_factor)
@@ -96,54 +96,88 @@ class PreviewPanel(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
-        # Toolbar
-        toolbar = QHBoxLayout()
-        toolbar.setContentsMargins(4, 4, 4, 4)
+        # Zoom toolbar
+        toolbar_widget = QWidget()
+        toolbar_widget.setStyleSheet(
+            "background-color: #f0f0f0; border-bottom: 1px solid #d0d0d0;"
+        )
+        toolbar = QHBoxLayout(toolbar_widget)
+        toolbar.setContentsMargins(6, 4, 6, 4)
+        toolbar.setSpacing(4)
 
         self.zoom_in_btn = QPushButton("+")
         self.zoom_in_btn.setFixedSize(32, 28)
         self.zoom_in_btn.setToolTip(tr.t("preview_zoom_in"))
+        self.zoom_in_btn.setStyleSheet(
+            "QPushButton { color: #1a1a1a; font-size: 16px; font-weight: bold; "
+            "border: 1px solid #ccc; border-radius: 4px; background: #fff; }"
+            "QPushButton:hover { background: #e0e8ff; }"
+        )
         self.zoom_in_btn.clicked.connect(lambda: self.view.zoom_in())
         toolbar.addWidget(self.zoom_in_btn)
 
-        self.zoom_out_btn = QPushButton("−")
+        self.zoom_out_btn = QPushButton("-")
         self.zoom_out_btn.setFixedSize(32, 28)
         self.zoom_out_btn.setToolTip(tr.t("preview_zoom_out"))
+        self.zoom_out_btn.setStyleSheet(
+            "QPushButton { color: #1a1a1a; font-size: 16px; font-weight: bold; "
+            "border: 1px solid #ccc; border-radius: 4px; background: #fff; }"
+            "QPushButton:hover { background: #e0e8ff; }"
+        )
         self.zoom_out_btn.clicked.connect(lambda: self.view.zoom_out())
         toolbar.addWidget(self.zoom_out_btn)
 
         self.fit_page_btn = QPushButton(tr.t("preview_fit_page"))
+        self.fit_page_btn.setStyleSheet(
+            "QPushButton { color: #1a1a1a; border: 1px solid #ccc; "
+            "border-radius: 4px; background: #fff; padding: 4px 10px; }"
+            "QPushButton:hover { background: #e0e8ff; }"
+        )
         self.fit_page_btn.clicked.connect(lambda: self.view.fit_in_view())
         toolbar.addWidget(self.fit_page_btn)
 
         self.fit_width_btn = QPushButton(tr.t("preview_fit_width"))
+        self.fit_width_btn.setStyleSheet(
+            "QPushButton { color: #1a1a1a; border: 1px solid #ccc; "
+            "border-radius: 4px; background: #fff; padding: 4px 10px; }"
+            "QPushButton:hover { background: #e0e8ff; }"
+        )
         self.fit_width_btn.clicked.connect(lambda: self.view.fit_width())
         toolbar.addWidget(self.fit_width_btn)
 
         self.actual_btn = QPushButton("100%")
         self.actual_btn.setToolTip(tr.t("preview_actual_size"))
+        self.actual_btn.setStyleSheet(
+            "QPushButton { color: #1a1a1a; border: 1px solid #ccc; "
+            "border-radius: 4px; background: #fff; padding: 4px 10px; }"
+            "QPushButton:hover { background: #e0e8ff; }"
+        )
         self.actual_btn.clicked.connect(lambda: self.view.actual_size())
         toolbar.addWidget(self.actual_btn)
 
         toolbar.addStretch()
 
         self.zoom_label = QLabel("100%")
+        self.zoom_label.setStyleSheet(
+            "color: #555555; font-size: 12px; font-weight: bold; "
+            "background: transparent;"
+        )
         toolbar.addWidget(self.zoom_label)
 
-        layout.addLayout(toolbar)
+        layout.addWidget(toolbar_widget)
 
-        # Graphics View
+        # Graphics View (shown when image is loaded)
         self.scene = QGraphicsScene()
         self.view = ZoomableGraphicsView(self.scene)
         self.view.zoom_changed.connect(self._on_zoom_changed)
-        self.view.setStyleSheet("background-color: #e0e0e0;")
         layout.addWidget(self.view)
 
-        # Placeholder label
+        # Placeholder (shown when no image)
         self.placeholder_label = QLabel(tr.t("preview_no_image"))
         self.placeholder_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.placeholder_label.setStyleSheet(
-            "color: #888; font-size: 14px; padding: 40px;"
+            "QLabel { color: #666666; font-size: 16px; padding: 60px; "
+            "background-color: #e8e8e8; }"
         )
 
         self._pixmap_item = None

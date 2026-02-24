@@ -263,12 +263,29 @@ class MainWindow(QMainWindow):
         self.action_about.triggered.connect(self._show_about)
 
     def _create_toolbar(self):
-        """Create main toolbar."""
+        """Create main toolbar with visible text buttons."""
         self.toolbar = QToolBar("Main Toolbar")
-        self.toolbar.setIconSize(QSize(24, 24))
         self.toolbar.setMovable(False)
+        self.toolbar.setToolButtonStyle(
+            Qt.ToolButtonStyle.ToolButtonTextOnly
+        )
+        self.toolbar.setStyleSheet(
+            "QToolBar { spacing: 4px; padding: 4px 8px; "
+            "background-color: #ffffff; border-bottom: 1px solid #e0e0e0; }"
+            "QToolBar QToolButton { color: #1a1a1a; padding: 6px 14px; "
+            "border-radius: 4px; border: 1px solid #d0d0d0; "
+            "background-color: #f8f8f8; font-size: 12px; min-width: 60px; }"
+            "QToolBar QToolButton:hover { background-color: #e8f0fe; "
+            "border-color: #0060c0; }"
+            "QToolBar QToolButton:pressed { background-color: #d2e3fc; }"
+            "QToolBar QToolButton:disabled { color: #aaaaaa; "
+            "border-color: #e0e0e0; background-color: #f0f0f0; }"
+            "QToolBar::separator { width: 1px; background: #e0e0e0; "
+            "margin: 4px 4px; }"
+        )
         self.addToolBar(self.toolbar)
 
+        # Scan buttons - styled as primary actions
         self.tb_scan = self.toolbar.addAction(tr.t("toolbar_scan"))
         self.tb_scan.triggered.connect(self._start_scan)
 
@@ -299,6 +316,18 @@ class MainWindow(QMainWindow):
 
         self.tb_settings = self.toolbar.addAction(tr.t("toolbar_settings"))
         self.tb_settings.triggered.connect(self._open_settings)
+
+        # Style the Scan button as primary (blue)
+        scan_btn = self.toolbar.widgetForAction(self.tb_scan)
+        if scan_btn:
+            scan_btn.setStyleSheet(
+                "QToolButton { background-color: #0060c0; color: white; "
+                "border: none; font-weight: bold; border-radius: 4px; "
+                "padding: 6px 18px; }"
+                "QToolButton:hover { background-color: #004fa0; }"
+                "QToolButton:pressed { background-color: #003d80; }"
+                "QToolButton:disabled { background-color: #a0a0a0; color: #d0d0d0; }"
+            )
 
     def _create_statusbar(self):
         """Create status bar."""
