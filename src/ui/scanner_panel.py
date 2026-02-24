@@ -1,8 +1,7 @@
 """Scanner settings panel - left sidebar for scanner configuration."""
 
-from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtWidgets import (
-    QComboBox, QGroupBox, QHBoxLayout, QLabel, QPushButton,
+from src.ui.qt_compat import (
+    Qt, Signal, QComboBox, QGroupBox, QHBoxLayout, QLabel, QPushButton,
     QSlider, QSpinBox, QVBoxLayout, QWidget,
 )
 
@@ -13,9 +12,9 @@ from src.i18n.translations import tr
 class ScannerPanel(QWidget):
     """Panel for configuring scanner settings."""
 
-    settings_changed = pyqtSignal()
-    refresh_requested = pyqtSignal()
-    scanner_selected = pyqtSignal(str)  # device_id
+    settings_changed = Signal()
+    refresh_requested = Signal()
+    scanner_selected = Signal(str)  # device_id
 
     def __init__(self, parent=None):
         super().__init__(parent)

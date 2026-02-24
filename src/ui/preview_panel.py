@@ -1,8 +1,7 @@
 """Preview panel - central area for displaying scanned images."""
 
-from PyQt6.QtCore import QRectF, Qt, pyqtSignal
-from PyQt6.QtGui import QImage, QPixmap, QWheelEvent
-from PyQt6.QtWidgets import (
+from src.ui.qt_compat import (
+    QRectF, Qt, Signal, QImage, QPixmap, QWheelEvent,
     QFrame, QGraphicsPixmapItem, QGraphicsScene, QGraphicsView,
     QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget,
 )
@@ -15,7 +14,7 @@ from src.i18n.translations import tr
 class ZoomableGraphicsView(QGraphicsView):
     """Graphics view with zoom support via mouse wheel."""
 
-    zoom_changed = pyqtSignal(float)
+    zoom_changed = Signal(float)
 
     def __init__(self, parent=None):
         super().__init__(parent)

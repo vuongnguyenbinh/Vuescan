@@ -8,13 +8,16 @@ setup(
     packages=find_packages(),
     python_requires=">=3.10",
     install_requires=[
-        "PyQt6>=6.6.0",
         "Pillow>=10.0.0",
         "img2pdf>=0.5.1",
         "pikepdf>=8.0.0",
-        "numpy>=1.24.0",
+        "numpy>=1.26.0",
         "reportlab>=4.0.0",
     ],
+    extras_require={
+        "pyqt6": ["PyQt6>=6.6.0"],
+        "pyside6": ["PySide6>=6.6.0"],
+    },
     entry_points={
         "console_scripts": [
             "fiscanpro=src.main:main",

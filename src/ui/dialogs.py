@@ -2,9 +2,8 @@
 
 import os
 
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import (
-    QCheckBox, QComboBox, QDialog, QDialogButtonBox, QFileDialog,
+from src.ui.qt_compat import (
+    Qt, QCheckBox, QComboBox, QDialog, QDialogButtonBox, QFileDialog,
     QFormLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit,
     QListWidget, QMessageBox, QPushButton, QRadioButton,
     QSlider, QSpinBox, QVBoxLayout, QWidget,

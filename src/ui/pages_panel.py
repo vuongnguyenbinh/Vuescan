@@ -1,8 +1,7 @@
 """Pages panel - thumbnail list of scanned pages on the right side."""
 
-from PyQt6.QtCore import QSize, Qt, pyqtSignal
-from PyQt6.QtGui import QIcon, QImage, QPixmap
-from PyQt6.QtWidgets import (
+from src.ui.qt_compat import (
+    QSize, Qt, Signal, QIcon, QImage, QPixmap,
     QAbstractItemView, QGroupBox, QHBoxLayout, QLabel,
     QListWidget, QListWidgetItem, QPushButton, QVBoxLayout, QWidget,
 )
@@ -17,10 +16,10 @@ THUMBNAIL_SIZE = 140
 class PagesPanel(QWidget):
     """Panel showing thumbnails of all scanned pages."""
 
-    page_selected = pyqtSignal(int)  # page index
-    page_delete_requested = pyqtSignal(list)  # list of indices
-    page_move_up = pyqtSignal(int)
-    page_move_down = pyqtSignal(int)
+    page_selected = Signal(int)  # page index
+    page_delete_requested = Signal(list)  # list of indices
+    page_move_up = Signal(int)
+    page_move_down = Signal(int)
 
     def __init__(self, parent=None):
         super().__init__(parent)

@@ -6,11 +6,10 @@ Integrates scanner panel, preview, pages panel, and all menus/toolbars.
 
 import logging
 import os
-import json
 
-from PyQt6.QtCore import QSettings, QSize, Qt, QThread, pyqtSignal
-from PyQt6.QtGui import QAction, QIcon, QKeySequence
-from PyQt6.QtWidgets import (
+from src.ui.qt_compat import (
+    QSettings, QSize, Qt, QThread, Signal,
+    QAction, QKeySequence,
     QApplication, QFileDialog, QHBoxLayout, QMainWindow,
     QMessageBox, QProgressBar, QSplitter, QStatusBar,
     QToolBar, QVBoxLayout, QWidget,
@@ -36,9 +35,9 @@ logger = logging.getLogger(__name__)
 class ScanWorker(QThread):
     """Background thread for scanning operations."""
 
-    page_scanned = pyqtSignal(object)  # PIL Image
-    scan_finished = pyqtSignal(int)    # total pages
-    scan_error = pyqtSignal(str)
+    page_scanned = Signal(object)  # PIL Image
+    scan_finished = Signal(int)    # total pages
+    scan_error = Signal(str)
 
     def __init__(self, engine: ScannerEngine, batch: bool = False,
                  max_pages: int = 0):

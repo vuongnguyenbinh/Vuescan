@@ -18,19 +18,31 @@ Similar to VueScan 9 but with **free PDF export without watermark**.
 ## Requirements
 
 - Windows 11
-- Python 3.10+
+- **Python 3.12 or 3.13** (recommended)
 - Fujitsu Fi-6125 scanner with TWAIN driver installed
+
+> **Note:** Python 3.14 is too new - PyQt6 does not have pre-built wheels yet.
+> If you must use Python 3.14, install PySide6 instead (see below).
 
 ## Installation
 
-### From Source
+### Option A: Python 3.12/3.13 (Recommended)
 ```bash
 pip install -r requirements.txt
+pip install PyQt6
+python -m src.main
+```
+
+### Option B: Python 3.14+ (Use PySide6)
+```bash
+pip install -r requirements.txt
+pip install PySide6
 python -m src.main
 ```
 
 ### Build Executable
 ```bash
+pip install pyinstaller
 python scripts/build.py
 ```
 The executable will be created in `dist/FiScanPro/`.
